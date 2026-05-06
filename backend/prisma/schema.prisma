@@ -13,7 +13,7 @@ datasource db {
 }
 
 model Note {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   title     String
   content   String
   tags      Tag[]    @relation("NoteTags")
@@ -22,7 +22,7 @@ model Note {
 }
 
 model Tag {
-  id    Int    @id @default(autoincrement())
-  name  String
+  id    String @id @default(cuid())
+  name  String @unique
   notes Note[] @relation("NoteTags")
 }
