@@ -33,7 +33,6 @@ export default function NoteCard({ note, onClick }: NoteCardProps) {
         ))}
         <span className="text-xs text-white/30">{date}</span>
       </div>
-      NoteCard
     </div>
   );
 }

@@ -13,7 +13,10 @@ export default function EditNotePage() {
 
   useEffect(() => {
     const fetchNote = async () => {
-      if (!id) return;
+      if (!id) {
+        setIsLoading(false);
+        return;
+      }
       try {
         const data = await notesApi.getById(id);
         setNote(data);
@@ -28,19 +31,6 @@ export default function EditNotePage() {
     fetchNote();
   }, [id, navigate]);
 
-  const handleSubmit = async (input: CreateNoteInput) => {
-    if (!id) return;
-    setIsSubmitting(true);
-    try {
-      await notesApi.update(id, input);
-      navigate(`/notes/${id}`);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-950 flex items-center justify-center">
@@ -49,7 +39,24 @@ export default function EditNotePage() {
     );
   }
 
-  if (!note) return null;
+  const handleSubmit = async (input: CreateNoteInput) => {
+    setIsSubmitting(true);
+    try {
+      if (isEditMode) {
+        await notesApi.update(id, input);
+        navigate(`/notes/${id}`);
+      } else {
+        const note = await notesApi.create(input);
+        navigate(`/notes/${note.id}`);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const isEditMode = !!id && !!note;
 
   return (
     <div className="min-h-screen bg-gray-950 px-4 py-10">
@@ -57,20 +64,26 @@ export default function EditNotePage() {
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <button
-            onClick={() => navigate(`/notes/${id}`)}
+            onClick={() => navigate(isEditMode ? `/notes/${id}` : "/notes")}
             className="text-sm text-white/40 hover:text-white transition-colors"
           >
             ← Retour
           </button>
-          <h1 className="text-lg font-semibold text-white">Modifier la note</h1>
+          <h1 className="text-lg font-semibold text-white">
+            {isEditMode ? "Modifier la note" : "Nouvelle note"}
+          </h1>
         </div>
 
         <NoteForm
-          initialValue={{
-            title: note.title,
-            content: note.content,
-            tags: note.tags.map((t) => t.name),
-          }}
+          initialValue={
+            isEditMode
+              ? {
+                  title: note.title,
+                  content: note.content,
+                  tags: note.tags.map((t) => t.name),
+                }
+              : undefined
+          }
           onSubmit={handleSubmit}
           isLoading={isSubmitting}
         />
