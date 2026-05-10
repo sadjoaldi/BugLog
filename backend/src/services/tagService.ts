@@ -1,32 +1,26 @@
 import { prisma } from "../lib/prisma";
 
-type Tag = {
-  id: string;
-  name: string;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
 export class TagService {
-  //get all tags
+  // Get all tags
   async getTags() {
     return prisma.tag.findMany({
       orderBy: { name: "asc" },
-      include: { notes: true },
+      include: { bugReports: true },
     });
   }
 
-  async getTagByNoteId(noteId: string) {
-    const note = await prisma.note.findUnique({
-      where: { id: noteId },
+  // Get tags by bug report id
+  async getTagsByBugReportId(bugReportId: string) {
+    const bugReport = await prisma.bugReport.findUnique({
+      where: { id: bugReportId },
       include: { tags: true },
     });
 
-    if (!note) {
-      throw new Error("Note not found");
+    if (!bugReport) {
+      throw new Error("BugReport not found");
     }
 
-    return note.tags;
+    return bugReport.tags;
   }
 }
 
