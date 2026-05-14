@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import hljs from "highlight.js";
@@ -7,6 +8,7 @@ import { ArrowLeft, Clock, Pencil, Star, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { bugReportsApi } from "../api/bugReports";
+import ConfirmDialog from "../components/ConfirmDialog";
 import SeverityBadge from "../components/SeverityBadge";
 import TagBadge from "../components/TagBadge";
 import TechBadge from "../components/TechBadge";
@@ -35,6 +37,9 @@ export default function BugReportDetailPage() {
   const navigate = useNavigate();
   const { showToast } = useToast();
   const snippetRef = useRef<HTMLElement>(null);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isTogglingFavorite, setIsTogglingFavorite] = useState(false);
 
   useEffect(() => {
     const fetchBugReport = async () => {
@@ -61,18 +66,22 @@ export default function BugReportDetailPage() {
   }, [bugReport]);
 
   const handleDelete = async () => {
-    if (!id || !confirm("Supprimer ce rapport ?")) return;
+    setIsDeleting(true);
     try {
-      await bugReportsApi.delete(id);
+      await bugReportsApi.delete(id!);
       showToast("Rapport supprimé.", "success");
       navigate("/");
     } catch (_) {
       showToast("Impossible de supprimer le rapport.", "error");
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteDialog(false);
     }
   };
-
+  // handleToggleFavorite
   const handleToggleFavorite = async () => {
     if (!id) return;
+    setIsTogglingFavorite(true);
     try {
       const updated = await bugReportsApi.toggleFavorite(id);
       setBugReport(updated);
@@ -82,9 +91,10 @@ export default function BugReportDetailPage() {
       );
     } catch (_) {
       showToast("Impossible de modifier le favori.", "error");
+    } finally {
+      setIsTogglingFavorite(false);
     }
   };
-
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -122,29 +132,34 @@ export default function BugReportDetailPage() {
           <Button
             variant="outline"
             onClick={handleToggleFavorite}
+            disabled={isTogglingFavorite}
             className={`gap-2 ${
               bugReport.isFavorite
                 ? "border-yellow-500/30 bg-yellow-500/10 text-yellow-400 hover:bg-yellow-500/20"
                 : "border-white/10 bg-white/5 text-white/60 hover:bg-white/10 hover:text-white"
             }`}
           >
-            <Star
-              className={`w-4 h-4 ${bugReport.isFavorite ? "fill-yellow-400" : ""}`}
-            />
+            {isTogglingFavorite ? (
+              <Spinner />
+            ) : (
+              <Star
+                className={`w-4 h-4 ${bugReport.isFavorite ? "fill-yellow-400" : ""}`}
+              />
+            )}
             {bugReport.isFavorite ? "Favori" : "Favori"}
           </Button>
           <Button
             variant="outline"
             onClick={() => navigate(`/bug-reports/${id}/edit`)}
-            className="gap-2 border-white/10 bg-white/5 text-white/60 hover:bg-white/10 hover:text-white"
+            className="gap-2 border-white/10 bg-white/5 text-white/60 hover:bg-white/10 hover:text-white cursor-pointer"
           >
             <Pencil className="w-4 h-4" />
             Modifier
           </Button>
           <Button
             variant="outline"
-            onClick={handleDelete}
-            className="gap-2 border-red-500/20 bg-red-500/10 text-red-400 hover:bg-red-500/20"
+            onClick={() => setShowDeleteDialog(true)}
+            className="gap-2 border-red-500/20 bg-red-500/10 text-red-400 hover:bg-red-500/50 cursor-pointer"
           >
             <Trash2 className="w-4 h-4" />
             Supprimer
@@ -272,6 +287,16 @@ export default function BugReportDetailPage() {
           </motion.div>
         )}
       </div>
+      <ConfirmDialog
+        isOpen={showDeleteDialog}
+        title="Supprimer ce rapport ?"
+        description="Cette action est irréversible. Le rapport sera définitivement supprimé."
+        confirmLabel="Supprimer"
+        cancelLabel="Annuler"
+        onConfirm={handleDelete}
+        onCancel={() => setShowDeleteDialog(false)}
+        isLoading={isDeleting}
+      />
     </motion.div>
   );
 }

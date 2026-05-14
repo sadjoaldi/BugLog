@@ -8,6 +8,7 @@ import type {
   Status,
 } from "../types";
 import Select from "./Select";
+import Spinner from "./Spinner";
 import TagBadge from "./TagBadge";
 import TechBadge from "./TechBadge";
 
@@ -369,11 +370,16 @@ export default function BugReportForm({
         }
         className="mt-2 rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
       >
-        {isLoading
-          ? "Enregistrement..."
-          : initialValues
-            ? "Mettre à jour"
-            : "Créer le rapport"}
+        {isLoading ? (
+          <>
+            <Spinner />
+            "Enregistrement..."
+          </>
+        ) : initialValues ? (
+          "Mettre à jour"
+        ) : (
+          "Créer le rapport"
+        )}
       </button>
     </form>
   );
