@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { bugReportsApi } from "../api/bugReports";
@@ -31,7 +33,6 @@ export default function BugReportsPage() {
       try {
         const data = await bugReportsApi.getAll(filters);
         setBugReports(data);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (_) {
         showToast("Impossible de charger les rapports.", "error");
       } finally {
@@ -70,50 +71,77 @@ export default function BugReportsPage() {
   return (
     <div>
       {/* Header */}
-      <div className="mb-8 flex items-center justify-between">
+      <motion.div
+        initial={{ opacity: 0, y: -8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.2 }}
+        className="mb-8 flex items-center justify-between"
+      >
         <div>
           <h2 className="text-xl font-bold text-white">{getPageTitle()}</h2>
           <p className="text-sm text-white/40 mt-1">
             {filtered.length} rapport{filtered.length > 1 ? "s" : ""}
           </p>
         </div>
-      </div>
+      </motion.div>
 
       {/* Search */}
-      <div className="mb-6">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.1 }}
+        className="mb-6"
+      >
         <SearchBar value={search} onChange={setSearch} />
-      </div>
+      </motion.div>
 
       {/* Active tag/tech filters */}
-      {(selectedTag || selectedTech) && (
-        <div className="mb-4 flex flex-wrap items-center gap-2">
-          <span className="text-sm text-white/40">Filtré par :</span>
-          {selectedTag && (
-            <span
-              onClick={() => setSelectedTag(null)}
-              className="cursor-pointer rounded-full bg-indigo-500/40 border border-indigo-400/50 text-indigo-200 px-3 py-1 text-xs font-medium"
-            >
-              #{selectedTag} ✕
-            </span>
-          )}
-          {selectedTech && (
-            <span
-              onClick={() => setSelectedTech(null)}
-              className="cursor-pointer rounded-full bg-emerald-500/40 border border-emerald-400/50 text-emerald-200 px-3 py-1 text-xs font-medium"
-            >
-              {selectedTech} ✕
-            </span>
-          )}
-        </div>
-      )}
+      <AnimatePresence>
+        {(selectedTag || selectedTech) && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="mb-4 flex flex-wrap items-center gap-2"
+          >
+            <span className="text-sm text-white/40">Filtré par :</span>
+            {selectedTag && (
+              <span
+                onClick={() => setSelectedTag(null)}
+                className="cursor-pointer rounded-full bg-indigo-500/40 border border-indigo-400/50 text-indigo-200 px-3 py-1 text-xs font-medium"
+              >
+                #{selectedTag} ✕
+              </span>
+            )}
+            {selectedTech && (
+              <span
+                onClick={() => setSelectedTech(null)}
+                className="cursor-pointer rounded-full bg-emerald-500/40 border border-emerald-400/50 text-emerald-200 px-3 py-1 text-xs font-medium"
+              >
+                {selectedTech} ✕
+              </span>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Bug reports */}
       {isLoading ? (
         <div className="flex items-center justify-center py-20">
-          <p className="text-white/30 text-sm">Chargement...</p>
+          <motion.p
+            animate={{ opacity: [0.3, 1, 0.3] }}
+            transition={{ repeat: Infinity, duration: 1.5 }}
+            className="text-white/30 text-sm"
+          >
+            Chargement...
+          </motion.p>
         </div>
       ) : filtered.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20 gap-3">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="flex flex-col items-center justify-center py-20 gap-3"
+        >
           <p className="text-4xl">🐛</p>
           <p className="text-white/30 text-sm">
             {search || selectedTag || selectedTech
@@ -126,13 +154,14 @@ export default function BugReportsPage() {
           >
             + Créer un rapport
           </button>
-        </div>
+        </motion.div>
       ) : (
         <div className="flex flex-col gap-4">
-          {filtered.map((bug) => (
+          {filtered.map((bug, index) => (
             <BugReportCard
               key={bug.id}
               bugReport={bug}
+              index={index}
               onClick={(id) => navigate(`/bug-reports/${id}`)}
               onTagClick={(tag) => setSelectedTag(tag)}
               onTechClick={(tech) => setSelectedTech(tech)}

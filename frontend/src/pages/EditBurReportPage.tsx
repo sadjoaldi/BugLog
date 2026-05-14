@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import { ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { bugReportsApi } from "../api/bugReports";
@@ -20,7 +24,6 @@ export default function EditBugReportPage() {
       try {
         const data = await bugReportsApi.getById(id);
         setBugReport(data);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (_) {
         showToast("Rapport introuvable.", "error");
         navigate("/");
@@ -45,7 +48,6 @@ export default function EditBugReportPage() {
         showToast("Rapport créé avec succès.", "success");
         navigate(`/bug-reports/${created.id}`);
       }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_) {
       showToast("Une erreur est survenue.", "error");
     } finally {
@@ -55,7 +57,7 @@ export default function EditBugReportPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+      <div className="flex items-center justify-center py-20">
         <p className="text-white/30 text-sm">Chargement...</p>
       </div>
     );
@@ -64,43 +66,48 @@ export default function EditBugReportPage() {
   const isEditMode = !!id && !!bugReport;
 
   return (
-    <div className="min-h-screen bg-gray-950 px-4 py-1">
-      <div className="mx-auto ">
-        {/* Header */}
-        <div className="mb-4 flex items-center justify-between">
-          <button
-            onClick={() => navigate(isEditMode ? `/bug-reports/${id}` : "/")}
-            className="text-sm text-white/40 hover:text-white transition-colors"
-          >
-            ← Retour
-          </button>
-          <h1 className="text-base font-semibold text-white">
-            {isEditMode ? "Modifier le rapport" : "Nouveau rapport"}
-          </h1>
-        </div>
-
-        <BugReportForm
-          initialValues={
-            isEditMode
-              ? {
-                  title: bugReport.title,
-                  description: bugReport.description,
-                  cause: bugReport.cause,
-                  solution: bugReport.solution,
-                  snippet: bugReport.snippet,
-                  category: bugReport.category,
-                  severity: bugReport.severity,
-                  status: bugReport.status,
-                  tags: bugReport.tags.map((t) => t.name),
-                  technologies: bugReport.technologies.map((t) => t.name),
-                  duration: bugReport.duration,
-                }
-              : undefined
-          }
-          onSubmit={handleSubmit}
-          isLoading={isSubmitting}
-        />
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.25 }}
+      className="max-w-3xl"
+    >
+      {/* Header */}
+      <div className="mb-8 flex items-center justify-between">
+        <Button
+          variant="ghost"
+          onClick={() => navigate(isEditMode ? `/bug-reports/${id}` : "/")}
+          className="text-white/40 hover:text-white gap-2"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Retour
+        </Button>
+        <h1 className="text-base font-semibold text-white">
+          {isEditMode ? "Modifier le rapport" : "Nouveau rapport"}
+        </h1>
       </div>
-    </div>
+
+      <BugReportForm
+        initialValues={
+          isEditMode
+            ? {
+                title: bugReport.title,
+                description: bugReport.description,
+                cause: bugReport.cause,
+                solution: bugReport.solution,
+                snippet: bugReport.snippet,
+                category: bugReport.category,
+                severity: bugReport.severity,
+                status: bugReport.status,
+                tags: bugReport.tags.map((t) => t.name),
+                technologies: bugReport.technologies.map((t) => t.name),
+                duration: bugReport.duration,
+              }
+            : undefined
+        }
+        onSubmit={handleSubmit}
+        isLoading={isSubmitting}
+      />
+    </motion.div>
   );
 }

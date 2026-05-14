@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import type { BugReport } from "../types";
 import SeverityBadge from "./SeverityBadge";
 import TagBadge from "./TagBadge";
@@ -8,6 +9,7 @@ type Props = {
   onClick: (id: string) => void;
   onTagClick?: (tag: string) => void;
   onTechClick?: (tech: string) => void;
+  index?: number;
 };
 
 const statusConfig = {
@@ -41,6 +43,7 @@ export default function BugReportCard({
   onClick,
   onTagClick,
   onTechClick,
+  index = 0,
 }: Props) {
   const preview =
     bugReport.description.length > 120
@@ -56,9 +59,13 @@ export default function BugReportCard({
   const { label, className } = statusConfig[bugReport.status];
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.25, delay: index * 0.06 }}
+      whileHover={{ scale: 1.01 }}
       onClick={() => onClick(bugReport.id)}
-      className="group cursor-pointer rounded-2xl border border-white/8 bg-white/3 p-5 hover:border-indigo-500/30 hover:bg-white/6 transition-all duration-200"
+      className="group cursor-pointer rounded-2xl border border-white/8 bg-white/3 p-5 hover:border-indigo-500/30 hover:bg-white/6 transition-colors duration-200"
     >
       {/* Top row */}
       <div className="flex items-start justify-between gap-4 mb-3">
@@ -90,7 +97,7 @@ export default function BugReportCard({
 
       {/* Bottom row */}
       <div className="flex items-center justify-between gap-2">
-        <div className="flex flex-wrap pt-2 gap-3 items-center">
+        <div className="flex flex-wrap gap-1.5 items-center">
           {bugReport.tags.map((tag) => (
             <TagBadge
               key={tag.id}
@@ -105,6 +112,9 @@ export default function BugReportCard({
               }
             />
           ))}
+          {bugReport.tags.length > 0 && bugReport.technologies.length > 0 && (
+            <span className="w-px h-3 bg-white/10 mx-1" />
+          )}
           {bugReport.technologies.map((tech) => (
             <TechBadge
               key={tech.id}
@@ -120,16 +130,15 @@ export default function BugReportCard({
             />
           ))}
         </div>
-        <span className="text-xs text-white/25 shrink-0">{date}</span>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 shrink-0">
           {bugReport.duration && (
             <span className="text-xs text-white/25">
               ⏱ {bugReport.duration}
             </span>
           )}
-          <span className="text-xs text-white/25 shrink-0">{date}</span>
+          <span className="text-xs text-white/25">{date}</span>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

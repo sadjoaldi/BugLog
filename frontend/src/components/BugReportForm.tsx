@@ -136,7 +136,7 @@ export default function BugReportForm({
   };
 
   const inputClass =
-    "w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/30 outline-none focus:border-indigo-500/50 focus:bg-white/10 transition-all duration-200";
+    "w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/40 outline-none focus:border-indigo-500/50 focus:bg-white/10 transition-all duration-200";
   const labelClass = "text-sm  font-medium text-white/60";
   const sectionClass = "flex flex-col gap-2";
 
