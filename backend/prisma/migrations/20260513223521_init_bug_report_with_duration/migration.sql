@@ -1,20 +1,3 @@
-/*
-  Warnings:
-
-  - You are about to drop the `Note` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `_NoteTags` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- DropTable
-PRAGMA foreign_keys=off;
-DROP TABLE "Note";
-PRAGMA foreign_keys=on;
-
--- DropTable
-PRAGMA foreign_keys=off;
-DROP TABLE "_NoteTags";
-PRAGMA foreign_keys=on;
-
 -- CreateTable
 CREATE TABLE "BugReport" (
     "id" TEXT NOT NULL PRIMARY KEY,
@@ -30,6 +13,12 @@ CREATE TABLE "BugReport" (
     "resolvedAt" DATETIME,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "Tag" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "name" TEXT NOT NULL
 );
 
 -- CreateTable
@@ -53,6 +42,9 @@ CREATE TABLE "_BugReportTechnologies" (
     CONSTRAINT "_BugReportTechnologies_A_fkey" FOREIGN KEY ("A") REFERENCES "BugReport" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "_BugReportTechnologies_B_fkey" FOREIGN KEY ("B") REFERENCES "Technology" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Tag_name_key" ON "Tag"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Technology_name_key" ON "Technology"("name");

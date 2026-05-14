@@ -13,6 +13,7 @@ type CreateBugReportInput = {
   isFavorite?: boolean;
   tags?: string[];
   technologies?: string[];
+  duration?: string;
 };
 
 type UpdateBugReportInput = Partial<CreateBugReportInput>;

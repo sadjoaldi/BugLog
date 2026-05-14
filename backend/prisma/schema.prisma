@@ -19,6 +19,7 @@ model BugReport {
   cause        String
   solution     String
   snippet      String?
+  duration     String?
   category     Category     @default(OTHER)
   status       Status       @default(OPEN)
   severity     Severity     @default(MEDIUM)

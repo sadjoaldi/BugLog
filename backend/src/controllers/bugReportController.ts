@@ -57,6 +57,7 @@ export const bugReportController = {
         isFavorite,
         tags,
         technologies,
+        duration,
       } = req.body;
 
       if (!title || !description || !cause || !solution) {
@@ -78,6 +79,7 @@ export const bugReportController = {
         isFavorite,
         tags,
         technologies,
+        duration,
       });
 
       res.status(201).json(bugReport);
@@ -104,6 +106,7 @@ export const bugReportController = {
         isFavorite,
         tags,
         technologies,
+        duration,
       } = req.body;
 
       if (
@@ -117,7 +120,8 @@ export const bugReportController = {
         !severity &&
         isFavorite === undefined &&
         !tags &&
-        !technologies
+        !technologies &&
+        !duration
       ) {
         res.status(400).json({ error: "Nothing to update" });
         return;
@@ -135,6 +139,7 @@ export const bugReportController = {
         isFavorite,
         tags,
         technologies,
+        duration,
       });
 
       res.json(bugReport);
