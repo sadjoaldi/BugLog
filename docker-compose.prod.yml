@@ -1,0 +1,27 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: buglog-backend
+    env_file:
+      - ./backend/.env.production
+    volumes:
+      - buglog-db:/app/data
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    command: sh -c "npx prisma migrate deploy && node dist/server.js"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: runner
+    container_name: buglog-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+volumes:
+  buglog-db:
