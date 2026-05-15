@@ -84,7 +84,19 @@ export default function BugReportForm({
   const [techInput, setTechInput] = useState("");
   const [showPreview, setShowPreview] = useState(false);
   const snippetRef = useRef<HTMLElement>(null);
-  const [duration, setDuration] = useState(initialValues?.duration ?? " ");
+  const [duration, setDuration] = useState(initialValues?.duration ?? "");
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validate = () => {
+    const newErrors: Record<string, string> = {};
+    if (!title.trim()) newErrors.title = "Le titre est requis.";
+    if (!description.trim())
+      newErrors.description = "La description est requise.";
+    if (!cause.trim()) newErrors.cause = "La cause est requise.";
+    if (!solution.trim()) newErrors.solution = "La solution est requise.";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   useEffect(() => {
     if (showPreview && snippetRef.current && snippet) {
@@ -114,13 +126,7 @@ export default function BugReportForm({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (
-      !title.trim() ||
-      !description.trim() ||
-      !cause.trim() ||
-      !solution.trim()
-    )
-      return;
+    if (!validate()) return;
     onSubmit({
       title,
       description,
@@ -132,7 +138,7 @@ export default function BugReportForm({
       status,
       tags,
       technologies,
-      duration,
+      duration: duration || undefined,
     });
   };
 
@@ -151,10 +157,16 @@ export default function BugReportForm({
         <input
           type="text"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e) => {
+            setTitle(e.target.value);
+            if (errors.title) setErrors((prev) => ({ ...prev, title: "" }));
+          }}
           placeholder="Ex: TypeError: Cannot read properties of undefined"
-          className={inputClass}
+          className={`${inputClass} ${errors.title ? "border-red-500/50" : ""}`}
         />
+        {errors.title && (
+          <p className="text-xs text-red-400 mt-1">{errors.title}</p>
+        )}
       </div>
 
       {/* Description */}
@@ -164,11 +176,18 @@ export default function BugReportForm({
         </label>
         <textarea
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={(e) => {
+            setDescription(e.target.value);
+            if (errors.description)
+              setErrors((prev) => ({ ...prev, description: "" }));
+          }}
           placeholder="Décris le comportement observé..."
           rows={3}
-          className={`${inputClass} resize-none`}
+          className={`${inputClass} resize-none ${errors.description ? "border-red-500/50" : ""}`}
         />
+        {errors.description && (
+          <p className="text-xs text-red-400 mt-1">{errors.description}</p>
+        )}
       </div>
 
       {/* Cause */}
@@ -178,11 +197,17 @@ export default function BugReportForm({
         </label>
         <textarea
           value={cause}
-          onChange={(e) => setCause(e.target.value)}
+          onChange={(e) => {
+            setCause(e.target.value);
+            if (errors.cause) setErrors((prev) => ({ ...prev, cause: "" }));
+          }}
           placeholder="Quelle était la cause racine ?"
           rows={3}
-          className={`${inputClass} resize-none`}
+          className={`${inputClass} resize-none ${errors.cause ? "border-red-500/50" : ""}`}
         />
+        {errors.cause && (
+          <p className="text-xs text-red-400 mt-1">{errors.cause}</p>
+        )}
       </div>
 
       {/* Solution */}
@@ -192,11 +217,18 @@ export default function BugReportForm({
         </label>
         <textarea
           value={solution}
-          onChange={(e) => setSolution(e.target.value)}
+          onChange={(e) => {
+            setSolution(e.target.value);
+            if (errors.solution)
+              setErrors((prev) => ({ ...prev, solution: "" }));
+          }}
           placeholder="Comment l'as-tu résolu ?"
           rows={3}
-          className={`${inputClass} resize-none`}
+          className={`${inputClass} resize-none ${errors.solution ? "border-red-500/50" : ""}`}
         />
+        {errors.solution && (
+          <p className="text-xs text-red-400 mt-1">{errors.solution}</p>
+        )}
       </div>
 
       {/* Duration */}
@@ -361,19 +393,13 @@ export default function BugReportForm({
       {/* Submit */}
       <button
         type="submit"
-        disabled={
-          isLoading ||
-          !title.trim() ||
-          !description.trim() ||
-          !cause.trim() ||
-          !solution.trim()
-        }
-        className="mt-2 rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
+        disabled={isLoading}
+        className="mt-2 rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
       >
         {isLoading ? (
           <>
             <Spinner />
-            "Enregistrement..."
+            Enregistrement...
           </>
         ) : initialValues ? (
           "Mettre à jour"

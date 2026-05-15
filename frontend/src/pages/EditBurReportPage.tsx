@@ -70,7 +70,6 @@ export default function EditBugReportPage() {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
-      className="max-w-3xl"
     >
       {/* Header */}
       <div className="mb-8 flex items-center justify-between">
