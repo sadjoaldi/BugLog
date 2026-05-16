@@ -17,9 +17,7 @@ export const technologyController = {
   // GET /api/v1/technologies/bug-reports/:id/technologies
   async getByBugReportId(req: Request<{ id: string }>, res: Response) {
     try {
-      const technologies = await technologyService.getTechnologiesByBugReportId(
-        req.params.id,
-      );
+      const technologies = await technologyService.getTechnologiesByBugReportId(req.params.id);
       res.json(technologies);
       return;
     } catch (error) {
