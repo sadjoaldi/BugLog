@@ -30,8 +30,7 @@ export default function Sidebar({ isOpen, onClose }: Props) {
   const location = useLocation();
 
   const isActive = (path: string) =>
-    location.pathname + location.search === path ||
-    location.pathname === path.split("?")[0];
+    location.pathname + location.search === path || location.pathname === path.split("?")[0];
 
   const handleNavigate = (path: string) => {
     navigate(path);
@@ -50,9 +49,7 @@ export default function Sidebar({ isOpen, onClose }: Props) {
             <Bug className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-sm font-bold text-white leading-none">
-              BugLog
-            </h1>
+            <h1 className="text-sm font-bold text-white leading-none">BugLog</h1>
             <p className="text-xs text-white/40 mt-0.5">Debug journal</p>
           </div>
         </div>
@@ -106,9 +103,7 @@ export default function Sidebar({ isOpen, onClose }: Props) {
           {statusItems.map((item) => (
             <button
               key={item.value}
-              onClick={() =>
-                handleNavigate(`/bug-reports?status=${item.value}`)
-              }
+              onClick={() => handleNavigate(`/bug-reports?status=${item.value}`)}
               className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs lg:text-sm text-white/50 hover:bg-white/5 hover:text-white transition-all duration-200"
             >
               <Circle className={`w-2 h-2 fill-current ${item.color}`} />
@@ -127,9 +122,7 @@ export default function Sidebar({ isOpen, onClose }: Props) {
           {severityItems.map((item) => (
             <button
               key={item.value}
-              onClick={() =>
-                handleNavigate(`/bug-reports?severity=${item.value}`)
-              }
+              onClick={() => handleNavigate(`/bug-reports?severity=${item.value}`)}
               className="flex items-center gap-3 px-3 py-2 rounded-xl text-xs lg:text-sm text-white/50 hover:bg-white/5 hover:text-white transition-all duration-200"
             >
               <Circle className={`w-2 h-2 fill-current ${item.color}`} />

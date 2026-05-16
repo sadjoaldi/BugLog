@@ -12,12 +12,7 @@ type Props<T extends string> = {
   label?: string;
 };
 
-export default function Select<T extends string>({
-  value,
-  onChange,
-  options,
-  label,
-}: Props<T>) {
+export default function Select<T extends string>({ value, onChange, options, label }: Props<T>) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -35,9 +30,7 @@ export default function Select<T extends string>({
 
   return (
     <div className="flex flex-col gap-2">
-      {label && (
-        <span className="text-sm font-medium text-white/60">{label}</span>
-      )}
+      {label && <span className="text-sm font-medium text-white/60">{label}</span>}
       <div ref={ref} className="relative">
         <button
           type="button"
@@ -52,11 +45,7 @@ export default function Select<T extends string>({
             strokeWidth={2}
             className={`w-4 h-4 text-white/40 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19 9l-7 7-7-7"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
           </svg>
         </button>
 

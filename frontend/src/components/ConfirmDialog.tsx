@@ -52,12 +52,8 @@ export default function ConfirmDialog({
               </div>
 
               {/* Content */}
-              <h2 className="text-base font-semibold text-white text-center mb-2">
-                {title}
-              </h2>
-              <p className="text-sm text-white/50 text-center mb-6">
-                {description}
-              </p>
+              <h2 className="text-base font-semibold text-white text-center mb-2">{title}</h2>
+              <p className="text-sm text-white/50 text-center mb-6">{description}</p>
 
               {/* Actions */}
               <div className="flex gap-3">

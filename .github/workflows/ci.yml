@@ -38,6 +38,10 @@ jobs:
           DATABASE_URL: "file:./dev.db"
         run: pnpm dlx prisma generate
 
+      - name: lint
+        working-directory: backend
+        run: pnpm lint
+
       - name: Build
         working-directory: backend
         run: pnpm build
@@ -70,6 +74,10 @@ jobs:
       - name: Type check
         working-directory: frontend
         run: pnpm tsc --noEmit
+
+      - name: lint
+        working-directory: frontend
+        run: pnpm lint
 
       - name: Build
         working-directory: frontend

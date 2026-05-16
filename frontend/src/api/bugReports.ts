@@ -26,10 +26,7 @@ export const bugReportsApi = {
     return data;
   },
 
-  update: async (
-    id: string,
-    input: UpdateBugReportInput,
-  ): Promise<BugReport> => {
+  update: async (id: string, input: UpdateBugReportInput): Promise<BugReport> => {
     const { data } = await api.patch(`/bug-reports/${id}`, input);
     return data;
   },

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import SkeletonCard from "@/components/SkeletonCard";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -6,7 +5,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { bugReportsApi } from "../api/bugReports";
 import BugReportCard from "../components/BugReportCard";
 import SearchBar from "../components/SearchBar";
-import { useToast } from "../context/ToastContext";
+
+import { useToast } from "@/hooks/useToast";
 import type { BugReport, BugReportsFilter } from "../types";
 
 export default function BugReportsPage() {
@@ -20,11 +20,8 @@ export default function BugReportsPage() {
   const { showToast } = useToast();
 
   const filters: BugReportsFilter = {
-    status:
-      (searchParams.get("status") as BugReportsFilter["status"]) || undefined,
-    severity:
-      (searchParams.get("severity") as BugReportsFilter["severity"]) ||
-      undefined,
+    status: (searchParams.get("status") as BugReportsFilter["status"]) || undefined,
+    severity: (searchParams.get("severity") as BugReportsFilter["severity"]) || undefined,
     isFavorite: searchParams.get("isFavorite") === "true" ? true : undefined,
   };
 
@@ -42,6 +39,7 @@ export default function BugReportsPage() {
     };
 
     fetchBugReports();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   const filtered = bugReports.filter((bug) => {
@@ -50,13 +48,9 @@ export default function BugReportsPage() {
       bug.description.toLowerCase().includes(search.toLowerCase()) ||
       bug.tags.some((t) => t.name.toLowerCase().includes(search.toLowerCase()));
 
-    const matchesTag = selectedTag
-      ? bug.tags.some((t) => t.name === selectedTag)
-      : true;
+    const matchesTag = selectedTag ? bug.tags.some((t) => t.name === selectedTag) : true;
 
-    const matchesTech = selectedTech
-      ? bug.technologies.some((t) => t.name === selectedTech)
-      : true;
+    const matchesTech = selectedTech ? bug.technologies.some((t) => t.name === selectedTech) : true;
 
     return matchesSearch && matchesTag && matchesTech;
   });

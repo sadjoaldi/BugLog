@@ -70,20 +70,14 @@ export default function BugReportCard({
       {/* Top row */}
       <div className="flex items-start justify-between gap-4 mb-3">
         <div className="flex items-center gap-2 min-w-0">
-          <span className="text-lg shrink-0">
-            {categoryConfig[bugReport.category] ?? "📝"}
-          </span>
+          <span className="text-lg shrink-0">{categoryConfig[bugReport.category] ?? "📝"}</span>
           <h2 className="text-base font-semibold text-white truncate group-hover:text-indigo-300 transition-colors">
             {bugReport.title}
           </h2>
         </div>
         <div className="flex items-center gap-2 shrink-0">
-          {bugReport.isFavorite && (
-            <span className="text-yellow-400 text-sm">★</span>
-          )}
-          <span
-            className={`rounded-full px-2.5 py-0.5 text-xs font-medium border ${className}`}
-          >
+          {bugReport.isFavorite && <span className="text-yellow-400 text-sm">★</span>}
+          <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium border ${className}`}>
             {label}
           </span>
           <SeverityBadge severity={bugReport.severity} />
@@ -91,9 +85,7 @@ export default function BugReportCard({
       </div>
 
       {/* Description */}
-      <p className="text-sm text-white/50 leading-relaxed mb-4 text-left">
-        {preview}
-      </p>
+      <p className="text-sm text-white/50 leading-relaxed mb-4 text-left">{preview}</p>
 
       {/* Bottom row */}
       <div className="flex items-center justify-between gap-2">
@@ -131,9 +123,7 @@ export default function BugReportCard({
         </div>
         <div className="flex items-center gap-3 shrink-0">
           {bugReport.duration && (
-            <span className="text-xs text-white/25">
-              ⏱ {bugReport.duration}
-            </span>
+            <span className="text-xs text-white/25">⏱ {bugReport.duration}</span>
           )}
           <span className="text-xs text-white/25">{date}</span>
         </div>

@@ -1,18 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import hljs from "highlight.js";
 import "highlight.js/styles/github-dark.css";
-import {
-  ArrowLeft,
-  CheckCircle,
-  Clock,
-  Copy,
-  Pencil,
-  Star,
-  Trash2,
-} from "lucide-react";
+import { ArrowLeft, CheckCircle, Clock, Copy, Pencil, Star, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { bugReportsApi } from "../api/bugReports";
@@ -20,7 +11,8 @@ import ConfirmDialog from "../components/ConfirmDialog";
 import SeverityBadge from "../components/SeverityBadge";
 import TagBadge from "../components/TagBadge";
 import TechBadge from "../components/TechBadge";
-import { useToast } from "../context/ToastContext";
+
+import { useToast } from "@/hooks/useToast";
 import type { BugReport } from "../types";
 
 const categoryConfig: Record<string, string> = {
@@ -64,6 +56,7 @@ export default function BugReportDetailPage() {
       }
     };
     fetchBugReport();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, navigate]);
 
   useEffect(() => {
@@ -107,10 +100,7 @@ export default function BugReportDetailPage() {
     try {
       const updated = await bugReportsApi.toggleFavorite(id);
       setBugReport(updated);
-      showToast(
-        updated.isFavorite ? "Ajouté aux favoris." : "Retiré des favoris.",
-        "success",
-      );
+      showToast(updated.isFavorite ? "Ajouté aux favoris." : "Retiré des favoris.", "success");
     } catch (_) {
       showToast("Impossible de modifier le favori.", "error");
     } finally {
@@ -163,9 +153,7 @@ export default function BugReportDetailPage() {
             {isTogglingFavorite ? (
               <Spinner />
             ) : (
-              <Star
-                className={`w-4 h-4 ${bugReport.isFavorite ? "fill-yellow-400" : ""}`}
-              />
+              <Star className={`w-4 h-4 ${bugReport.isFavorite ? "fill-yellow-400" : ""}`} />
             )}
             {bugReport.isFavorite ? "Favori" : "Favori"}
           </Button>
@@ -191,9 +179,7 @@ export default function BugReportDetailPage() {
       {/* Title & meta */}
       <div className="mb-6">
         <div className="flex flex-wrap items-center gap-2 mb-3">
-          <span className="text-2xl">
-            {categoryConfig[bugReport.category] ?? "📝"}
-          </span>
+          <span className="text-2xl">{categoryConfig[bugReport.category] ?? "📝"}</span>
           <span
             className={`rounded-full px-2.5 py-0.5 text-xs font-medium border ${
               bugReport.status === "RESOLVED"
@@ -208,9 +194,7 @@ export default function BugReportDetailPage() {
             {bugReport.category}
           </span>
         </div>
-        <h1 className="text-2xl font-bold text-white mb-2">
-          {bugReport.title}
-        </h1>
+        <h1 className="text-2xl font-bold text-white mb-2">{bugReport.title}</h1>
         <div className="flex items-center gap-4">
           <p className="text-xs text-white/30">Modifié le {date}</p>
           {bugReport.duration && (

@@ -31,12 +31,8 @@ export default function NotFoundPage() {
           transition={{ delay: 0.2 }}
           className="text-center"
         >
-          <h1 className="text-xl font-semibold text-white mb-2">
-            Page introuvable
-          </h1>
-          <p className="text-sm text-white/40">
-            Cette page n'existe pas ou a été déplacée.
-          </p>
+          <h1 className="text-xl font-semibold text-white mb-2">Page introuvable</h1>
+          <p className="text-sm text-white/40">Cette page n'existe pas ou a été déplacée.</p>
         </motion.div>
         <motion.div
           initial={{ opacity: 0, y: 8 }}

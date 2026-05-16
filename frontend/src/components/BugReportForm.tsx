@@ -1,12 +1,7 @@
 import hljs from "highlight.js";
 import "highlight.js/styles/github-dark.css";
 import { useEffect, useRef, useState } from "react";
-import type {
-  Category,
-  CreateBugReportInput,
-  Severity,
-  Status,
-} from "../types";
+import type { Category, CreateBugReportInput, Severity, Status } from "../types";
 import Select from "./Select";
 import Spinner from "./Spinner";
 import TagBadge from "./TagBadge";
@@ -57,29 +52,17 @@ const STATUS_OPTIONS = [
   { value: "RESOLVED", label: "🟢 Résolu" },
 ] as const;
 
-export default function BugReportForm({
-  initialValues,
-  onSubmit,
-  isLoading,
-}: Props) {
+export default function BugReportForm({ initialValues, onSubmit, isLoading }: Props) {
   const [title, setTitle] = useState(initialValues?.title ?? "");
-  const [description, setDescription] = useState(
-    initialValues?.description ?? "",
-  );
+  const [description, setDescription] = useState(initialValues?.description ?? "");
   const [cause, setCause] = useState(initialValues?.cause ?? "");
   const [solution, setSolution] = useState(initialValues?.solution ?? "");
   const [snippet, setSnippet] = useState(initialValues?.snippet ?? "");
-  const [category, setCategory] = useState<Category>(
-    initialValues?.category ?? "OTHER",
-  );
-  const [severity, setSeverity] = useState<Severity>(
-    initialValues?.severity ?? "MEDIUM",
-  );
+  const [category, setCategory] = useState<Category>(initialValues?.category ?? "OTHER");
+  const [severity, setSeverity] = useState<Severity>(initialValues?.severity ?? "MEDIUM");
   const [status, setStatus] = useState<Status>(initialValues?.status ?? "OPEN");
   const [tags, setTags] = useState<string[]>(initialValues?.tags ?? []);
-  const [technologies, setTechnologies] = useState<string[]>(
-    initialValues?.technologies ?? [],
-  );
+  const [technologies, setTechnologies] = useState<string[]>(initialValues?.technologies ?? []);
   const [tagInput, setTagInput] = useState("");
   const [techInput, setTechInput] = useState("");
   const [showPreview, setShowPreview] = useState(false);
@@ -90,8 +73,7 @@ export default function BugReportForm({
   const validate = () => {
     const newErrors: Record<string, string> = {};
     if (!title.trim()) newErrors.title = "Le titre est requis.";
-    if (!description.trim())
-      newErrors.description = "La description est requise.";
+    if (!description.trim()) newErrors.description = "La description est requise.";
     if (!cause.trim()) newErrors.cause = "La cause est requise.";
     if (!solution.trim()) newErrors.solution = "La solution est requise.";
     setErrors(newErrors);
@@ -164,9 +146,7 @@ export default function BugReportForm({
           placeholder="Ex: TypeError: Cannot read properties of undefined"
           className={`${inputClass} ${errors.title ? "border-red-500/50" : ""}`}
         />
-        {errors.title && (
-          <p className="text-xs text-red-400 mt-1">{errors.title}</p>
-        )}
+        {errors.title && <p className="text-xs text-red-400 mt-1">{errors.title}</p>}
       </div>
 
       {/* Description */}
@@ -178,16 +158,13 @@ export default function BugReportForm({
           value={description}
           onChange={(e) => {
             setDescription(e.target.value);
-            if (errors.description)
-              setErrors((prev) => ({ ...prev, description: "" }));
+            if (errors.description) setErrors((prev) => ({ ...prev, description: "" }));
           }}
           placeholder="Décris le comportement observé..."
           rows={3}
           className={`${inputClass} resize-none ${errors.description ? "border-red-500/50" : ""}`}
         />
-        {errors.description && (
-          <p className="text-xs text-red-400 mt-1">{errors.description}</p>
-        )}
+        {errors.description && <p className="text-xs text-red-400 mt-1">{errors.description}</p>}
       </div>
 
       {/* Cause */}
@@ -205,9 +182,7 @@ export default function BugReportForm({
           rows={3}
           className={`${inputClass} resize-none ${errors.cause ? "border-red-500/50" : ""}`}
         />
-        {errors.cause && (
-          <p className="text-xs text-red-400 mt-1">{errors.cause}</p>
-        )}
+        {errors.cause && <p className="text-xs text-red-400 mt-1">{errors.cause}</p>}
       </div>
 
       {/* Solution */}
@@ -219,16 +194,13 @@ export default function BugReportForm({
           value={solution}
           onChange={(e) => {
             setSolution(e.target.value);
-            if (errors.solution)
-              setErrors((prev) => ({ ...prev, solution: "" }));
+            if (errors.solution) setErrors((prev) => ({ ...prev, solution: "" }));
           }}
           placeholder="Comment l'as-tu résolu ?"
           rows={3}
           className={`${inputClass} resize-none ${errors.solution ? "border-red-500/50" : ""}`}
         />
-        {errors.solution && (
-          <p className="text-xs text-red-400 mt-1">{errors.solution}</p>
-        )}
+        {errors.solution && <p className="text-xs text-red-400 mt-1">{errors.solution}</p>}
       </div>
 
       {/* Duration */}
@@ -280,25 +252,19 @@ export default function BugReportForm({
           label="Catégorie"
           value={category}
           onChange={setCategory}
-          options={
-            CATEGORY_OPTIONS as unknown as { value: Category; label: string }[]
-          }
+          options={CATEGORY_OPTIONS as unknown as { value: Category; label: string }[]}
         />
         <Select
           label="Sévérité"
           value={severity}
           onChange={setSeverity}
-          options={
-            SEVERITY_OPTIONS as unknown as { value: Severity; label: string }[]
-          }
+          options={SEVERITY_OPTIONS as unknown as { value: Severity; label: string }[]}
         />
         <Select
           label="Statut"
           value={status}
           onChange={setStatus}
-          options={
-            STATUS_OPTIONS as unknown as { value: Status; label: string }[]
-          }
+          options={STATUS_OPTIONS as unknown as { value: Status; label: string }[]}
         />
       </div>
 
@@ -377,9 +343,7 @@ export default function BugReportForm({
                 <TechBadge name={tech} />
                 <button
                   type="button"
-                  onClick={() =>
-                    setTechnologies(technologies.filter((t) => t !== tech))
-                  }
+                  onClick={() => setTechnologies(technologies.filter((t) => t !== tech))}
                   className="text-white/30 hover:text-white/70 transition-colors text-xs"
                 >
                   ✕

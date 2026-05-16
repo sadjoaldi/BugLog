@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
@@ -6,7 +5,8 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { bugReportsApi } from "../api/bugReports";
 import BugReportForm from "../components/BugReportForm";
-import { useToast } from "../context/ToastContext";
+
+import { useToast } from "@/hooks/useToast";
 import type { BugReport, CreateBugReportInput } from "../types";
 
 export default function EditBugReportPage() {
@@ -33,6 +33,7 @@ export default function EditBugReportPage() {
     };
 
     fetchBugReport();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, navigate]);
 
   const handleSubmit = async (input: CreateBugReportInput) => {

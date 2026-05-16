@@ -27,9 +27,7 @@ export default function SeverityBadge({ severity }: Props) {
   const { label, className } = config[severity];
 
   return (
-    <span
-      className={`rounded-full px-3 py-1 text-xs font-medium border ${className}`}
-    >
+    <span className={`rounded-full px-3 py-1 text-xs font-medium border ${className}`}>
       {label}
     </span>
   );
