@@ -75,7 +75,7 @@ jobs:
         working-directory: frontend
         run: pnpm build
 
-  # ─── Docker ────────────────────────────────────────────────
+  # ─── Docker ───────────────────────────────────────────────
   docker-build:
     name: Docker — Build Images
     runs-on: ubuntu-latest
